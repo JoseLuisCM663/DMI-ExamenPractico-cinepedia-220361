@@ -17,14 +17,25 @@ dependencies:
   card_swiper: ^3.0.1
   intl: ^0.20.2
   animate_do: ^4.2.0
+  audioplayers: ^6.0.0        # <--- NECESARIO PARA EL AUDIO DEL SPLASH
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#0D47A1"
+  adaptive_icon_foreground: "assets/icon/icon.png"
 
 flutter:
   uses-material-design: true
 
   assets:
     - .env
+    - assets/icon/icon.png
+    - assets/audio/splash.wav      # <--- AUDIO DEL SPLASH
