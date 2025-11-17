@@ -1,51 +1,30 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cinemapedia_220361/presentation/providers/movies/loader_progress_provider.dart';
 
-class FullscreenLoader extends StatefulWidget {
+class FullscreenLoader extends ConsumerWidget {
   const FullscreenLoader({super.key});
 
-  @override
-  State<FullscreenLoader> createState() => _FullscreenLoaderState();
-}
-
-class _FullscreenLoaderState extends State<FullscreenLoader> {
-  final List<String> messages = [
+  final List<String> messages = const [
     'Estableciendo elementos de comunicación',
     'Conectando a la API de TheMovieDB',
     'Obteniendo las películas que actualmente se proyectan',
     'Obteniendo los próximos estrenos',
     'Obteniendo las películas mejor valoradas',
     'Obteniendo las mejores películas Mexicanas',
-    'Todo listo...comencemos',
+    'Todo listo... comencemos',
   ];
 
-  double progress = 0.0;
-  int index = 0;
-
   @override
-  void initState() {
-    super.initState();
-    _simulateProgress();
-  }
+  Widget build(BuildContext context, WidgetRef ref) {
+    final progress = ref.watch(loaderProgressProvider);
 
-  /// Simula el progreso mientras los providers cargan datos
-  void _simulateProgress() {
-    Timer.periodic(const Duration(milliseconds: 1500), (timer) {
-      if (index >= messages.length) {
-        timer.cancel();
-        return;
-      }
+    /// Determinar qué mensaje se mostrará según el progreso real del provider
+    final maxIndex = messages.length - 1;
+    int index = (progress * maxIndex).clamp(0, maxIndex).round();
+    final currentMessage = messages[index];
 
-      setState(() {
-        index++;
-        progress = index / messages.length;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final colorPrimary = const Color(0xFFE50914); // rojo estilo logo
+    final colorPrimary = const Color(0xFFE50914); // rojo estilo Cinemapedia
     final colorDark = Colors.black87;
 
     return Scaffold(
@@ -67,11 +46,11 @@ class _FullscreenLoaderState extends State<FullscreenLoader> {
 
               const SizedBox(height: 40),
 
-              /// Barra progresiva
+              /// BARRA DE PROGRESO REAL
               ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
-                  value: progress, // <-- AQUÍ YA NO USAMOS NULL
+                  value: progress == 0 ? 0.01 : progress,
                   minHeight: 12,
                   backgroundColor: Colors.black12,
                   valueColor: AlwaysStoppedAnimation<Color>(colorPrimary),
@@ -80,21 +59,21 @@ class _FullscreenLoaderState extends State<FullscreenLoader> {
 
               const SizedBox(height: 15),
 
-              /// Porcentaje mostrado
+              /// PORCENTAJE MÁS LIMPIO
               Text(
                 "${(progress * 100).toInt()}%",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16,
                   color: colorPrimary,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
 
               const SizedBox(height: 25),
 
-              /// Mensajes dinámicos
+              /// MENSAJE ACTUAL DINÁMICO
               Text(
-                messages[index == 0 ? 0 : index - 1],
+                currentMessage,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,

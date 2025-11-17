@@ -1,18 +1,21 @@
-import 'package:cinemapedia_220361/presentation/screens/screens.dart';
-import 'package:cinemapedia_220361/presentation/screens/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
-/// Configuración principal de navegación de la aplicación.
-/// Incluye la pantalla de Splash como pantalla inicial.
+// Screens principales
+import 'package:cinemapedia_220361/presentation/screens/screens.dart';
+
+// Splash
+import 'package:cinemapedia_220361/presentation/screens/splash/splash_screen.dart';
+
+/// Configuración de navegación de la aplicación.
+/// Incluye SplashScreen como pantalla inicial.
 final appRouter = GoRouter(
-  // La primera pantalla deberá ser el Splash
   initialLocation: '/splash',
 
   routes: [
-    /// --- RUTA DEL SPLASH ---
+    /// --- SPLASH SCREEN ---
     GoRoute(
       path: '/splash',
-      name: 'splash-screen',
+      name: SplashScreen.name,
       builder: (context, state) => const SplashScreen(),
     ),
 
@@ -21,7 +24,6 @@ final appRouter = GoRouter(
       path: '/',
       name: HomeScreen.name,
       builder: (context, state) => const HomeScreen(),
-
       routes: [
         /// --- DETALLE DE PELÍCULA ---
         GoRoute(
