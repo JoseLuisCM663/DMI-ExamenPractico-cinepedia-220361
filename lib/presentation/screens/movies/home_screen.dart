@@ -42,6 +42,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
   void initState() {
     super.initState();
 
+    
     /// Carga la primera página de películas al inicializar la pantalla
     ref.read(nowPlayingMoviesProvider.notifier).loadNextPage();
     ref.read(popularMoviesProvider.notifier).loadNextPage();
@@ -49,6 +50,20 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     ref.read(upcomingMoviesProvider.notifier).loadNextPage();
     ref.read(mexicanMoviesProvider.notifier).loadNextPage();
   }
+  String _nombreDia(int dia) {
+  const dias = [
+    "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"
+  ];
+  return dias[dia - 1];
+}
+
+String _nombreMes(int mes) {
+  const meses = [
+    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+  ];
+  return meses[mes - 1];
+}
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +77,12 @@ class _HomeViewState extends ConsumerState<_HomeView> {
     final upcomingMovies = ref.watch(upcomingMoviesProvider);
     final mexicanMovies = ref.watch(mexicanMoviesProvider);
     final slideShowMovies = ref.watch(movieSlideShowProvider);
+    // Obtener la fecha actual del dispositivo
+    final now = DateTime.now();
+
+    // Formatear la fecha a "Lunes 27 de Octubre"
+    final fechaActual = 
+        "${_nombreDia(now.weekday)} ${now.day} de ${_nombreMes(now.month)}";
 
     /// Lista deslizable que muestra todas las películas
     return CustomScrollView(
@@ -80,7 +101,7 @@ class _HomeViewState extends ConsumerState<_HomeView> {
                 MovieHorizontalListview(
                   movies: nowPlayingMovies,
                   title: 'En cines',
-                  subTitle: "Lunes 27 de Octubre",
+                  subTitle: fechaActual,
                   loadNextPage: () => ref
                       .read(nowPlayingMoviesProvider.notifier)
                       .loadNextPage(),
