@@ -4,7 +4,7 @@ import 'package:cinemapedia_220361/domain/entities/movie.dart';
 import 'package:cinemapedia_220361/infrastructure/mappers/movie_mapper.dart';
 import 'package:cinemapedia_220361/infrastructure/models/moviedb/moviedb_response.dart';
 import 'package:dio/dio.dart';
-
+import 'package:cinemapedia_220361/infrastructure/models/moviedb/movie_rating.dart';
 /// Implementación concreta del datasource que obtiene datos de TheMovieDB API.
 ///
 /// Esta clase se encarga de realizar peticiones HTTP a la API de TheMovieDB
@@ -125,4 +125,26 @@ class MoviedbDataSource extends MoviesDatasource {
 
     return movies;
   }
+  @override
+Future<String> getMovieCertification(int movieId) async {
+  final response = await dio.get('/movie/$movieId/release_dates');
+
+  final results = response.data['results'] as List<dynamic>;
+
+  // Buscamos solo clasificación de USA
+  final usEntry = results.firstWhere(
+    (item) => item['iso_3166_1'] == 'US',
+    orElse: () => null,
+  );
+
+  if (usEntry == null) return 'NR'; // No Rated
+
+  final releaseDates = usEntry['release_dates'] as List;
+
+  if (releaseDates.isEmpty) return 'NR';
+
+  final cert = releaseDates[0]['certification'];
+
+  return cert.isEmpty ? 'NR' : cert;
+}
 }

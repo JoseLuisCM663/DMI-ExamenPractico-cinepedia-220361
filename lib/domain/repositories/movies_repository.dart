@@ -20,4 +20,6 @@ abstract class MoviesRepository {
   Future<List<Movie>> getTopRated({int page = 1});
 
   Future<List<Movie>> getMexicanMovies({int page = 1});
+
+  Future<String> getMovieCertification(int movieId);
 }

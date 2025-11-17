@@ -37,4 +37,9 @@ class MovieRepositoryImpl implements MoviesRepository {
   Future<List<Movie>> getMexicanMovies({int page = 1}) {
     return datasource.getMexicanMovies(page: page);
   }
+  @override
+  Future<String> getMovieCertification(int movieId) {
+  return datasource.getMovieCertification(movieId);
+}
+
 }

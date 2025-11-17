@@ -3,6 +3,8 @@ import 'package:cinemapedia_220361/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cinemapedia_220361/presentation/providers/movies/movie_rating_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
@@ -72,13 +74,33 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
 
 // ---------------- SLIDE ----------------
 
-class _Slide extends StatelessWidget {
+class _Slide extends ConsumerWidget {
   final Movie movie;
+
   const _Slide({required this.movie});
 
+  Color _ratingColor(String rating) {
+    switch (rating) {
+      case "G":
+        return Colors.greenAccent;
+      case "PG":
+        return Colors.lightBlueAccent;
+      case "PG-13":
+        return Colors.orangeAccent;
+      case "R":
+        return Colors.redAccent;
+      default:
+        return Colors.grey;
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final textStyles = Theme.of(context).textTheme;
+
+    // Provider real que llama a TMDB
+    final ratingAsync = ref.watch(movieRatingProvider(movie.id));
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
@@ -91,30 +113,20 @@ class _Slide extends StatelessWidget {
             height: 215,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.network(
-                movie.posterPath,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress != null) {
-                    return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                    );
-                  }
-                  return GestureDetector(
-                    onTap: () => context.push('/movie/${movie.id}'),
-                    child: FadeIn(child: child),
-                  );
-                },
+              child: GestureDetector(
+                onTap: () => context.push('/movie/${movie.id}'),
+                child: FadeInImage.assetNetwork(
+                  placeholder: 'assets/loaders/bottle-loader.gif',
+                  image: movie.posterPath,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
 
           const SizedBox(height: 5),
 
-          // Title
+          // Titulo
           SizedBox(
             width: 150,
             child: Text(
@@ -125,9 +137,58 @@ class _Slide extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 3),
+          const SizedBox(height: 4),
 
-          // Rating
+          // ---------------- CLASIFICACIÓN (PÍLDORA) ----------------
+          /*
+                ratingAsync.when(
+                data: (rating) => Container(
+                  padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(
+                  color: _ratingColor(rating).withOpacity(0.85),
+                  borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                  rating,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  ),
+                ),
+
+                loading: () => Container(
+                  width: 22,
+                  height: 22,
+                  padding: const EdgeInsets.all(2),
+                  child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  ),
+                ),
+
+                error: (_, __) => Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.85),
+                  borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                  "NR",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                  ),
+                ),
+                ),
+
+                const SizedBox(height: 4),
+          */
+
+          // Rating y Popularidad
           SizedBox(
             width: 150,
             child: Row(
@@ -144,7 +205,7 @@ class _Slide extends StatelessWidget {
                     color: Colors.yellow.shade800,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   HumanFormats.humanReadbleNumber(movie.popularity),
                   style: textStyles.bodySmall,
@@ -157,6 +218,7 @@ class _Slide extends StatelessWidget {
     );
   }
 }
+
 
 // ---------------- HEADER ----------------
 
