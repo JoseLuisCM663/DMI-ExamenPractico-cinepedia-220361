@@ -1,4 +1,4 @@
-::: {align="center"}
+
 ## 🏫 UNIVERSIDAD TECNOLÓGICA DE XICOTEPEC DE JUÁREZ
 
 ### 👩‍💻 INGENIERÍA EN DESARROLLO Y GESTIÓN DE SOFTWARE
@@ -29,7 +29,7 @@
 
 ### 🔴 Icono 
 
-![Icono  ](assets\screenshots\icono.jpeg)
+![Icono  ](assets/screenshots/icono.jpeg)
 
 ### 🟡 Splash Screen
 
