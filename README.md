@@ -33,37 +33,37 @@
 
 ### 🟡 Splash Screen
 
-![Splash Screen](assets\screenshots\SplashScreen.jpeg)
+![Splash Screen](assets/screenshots/SplashScreen.jpeg)
 
 ### 🟤 Loading Screen progresivo
 
-![Loading Screen progresivo](assets\screenshots\LoadingScreenprogresivo.jpeg)
+![Loading Screen progresivo](assets/screenshots/LoadingScreenprogresivo.jpeg)
 
 ### ⚪  Clasificación de la pelicula según el estandar global ("US")
 
-![ Clasificación de la pelicula según el estandar global ("US") ](assets\screenshots\lasificación.jpeg)
+![ Clasificación de la pelicula según el estandar global ("US") ](assets/screenshots/lasificación.jpeg)
 
 ### ⚫ fecha dinámica actual 
 
-![fecha dinámica actual ](assets\screenshots\fechadinámicaactual .jpeg)
+![fecha dinámica actual ](assets/screenshots/fechadinámicaactual.jpeg)
 
 ### 🟣 fecha de estreno
 
-![fecha de estreno](assets\screenshots\fechadeestreno.jpeg)
+![fecha de estreno](assets/screenshots/fechadeestreno.jpeg)
 
 ### 🟣 quitar el subtitulo
 
-![quitar el subtitulo](assets\screenshots\quitarelsubtitulo.jpeg)
+![quitar el subtitulo](assets/screenshots/quitarelsubtitulo.jpeg)
 
 ### 🟣 ordenarár por fecha de  esteno descendente
 
-![ordenarár por fecha de  esteno descendente](assets\screenshots\estenodescendente.jpeg)
+![ordenarár por fecha de  esteno descendente](assets/screenshots/estenodescendente.jpeg)
 
 ### 🟣 sección de Series 
 
-![sección de Series ](assets\screenshots\series.jpeg)
-![sección de Series ](assets\screenshots\series1.jpeg)
-![sección de Series ](assets\screenshots\series2.jpeg)
+![sección de Series ](assets/screenshots/series.jpeg)
+![sección de Series ](assets/screenshots/series1.jpeg)
+![sección de Series ](assets/screenshots/series2.jpeg)
 ------------------------------------------------------------------------
 
 
