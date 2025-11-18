@@ -119,7 +119,6 @@ String _nombreMes(int mes) {
                 MovieHorizontalListview(
                   movies: popular,
                   title: 'Populares',
-                  subTitle: "Noviembre",
                   loadNextPage: () =>
                       ref.read(popularMoviesProvider.notifier).loadNextPage(),
                 ),
