@@ -111,6 +111,7 @@ String _nombreMes(int mes) {
                   movies: upcomingMovies,
                   title: 'Próximamente',
                   subTitle: "Noviembre",
+                  isUpcoming:true,
                   loadNextPage: () =>
                       ref.read(upcomingMoviesProvider.notifier).loadNextPage(),
                 ),

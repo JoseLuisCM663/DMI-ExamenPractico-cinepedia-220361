@@ -1,16 +1,17 @@
 import 'package:cinemapedia_220361/config/helpers/human_formats.dart';
 import 'package:cinemapedia_220361/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cinemapedia_220361/presentation/providers/movies/movie_rating_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 
 class MovieHorizontalListview extends StatefulWidget {
   final List<Movie> movies;
   final String? title;
   final String? subTitle;
   final VoidCallback? loadNextPage;
+  final bool isUpcoming; // 🔥 Nuevo parámetro importante
 
   const MovieHorizontalListview({
     super.key,
@@ -18,6 +19,7 @@ class MovieHorizontalListview extends StatefulWidget {
     this.title,
     this.subTitle,
     this.loadNextPage,
+    this.isUpcoming = false,
   });
 
   @override
@@ -27,14 +29,16 @@ class MovieHorizontalListview extends StatefulWidget {
 
 class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   final scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
+
     scrollController.addListener(() {
       if (widget.loadNextPage == null) return;
+
       if (scrollController.position.pixels + 200 >=
           scrollController.position.maxScrollExtent) {
-        print('Cargando las peliculas siguientes');
         widget.loadNextPage!();
       }
     });
@@ -62,7 +66,10 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemBuilder: (context, index) {
-                return _Slide(movie: widget.movies[index]);
+                return _Slide(
+                  movie: widget.movies[index],
+                  isUpcoming: widget.isUpcoming, // <-- 🔥 Se envía aquí
+                );
               },
             ),
           ),
@@ -72,12 +79,15 @@ class _MovieHorizontalListviewState extends State<MovieHorizontalListview> {
   }
 }
 
-// ---------------- SLIDE ----------------
+// ---------------------------------------------------------------------
+// ------------------------------- SLIDE -------------------------------
+// ---------------------------------------------------------------------
 
 class _Slide extends ConsumerWidget {
   final Movie movie;
+  final bool isUpcoming;
 
-  const _Slide({required this.movie});
+  const _Slide({required this.movie, required this.isUpcoming});
 
   Color _ratingColor(String rating) {
     switch (rating) {
@@ -98,8 +108,12 @@ class _Slide extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyles = Theme.of(context).textTheme;
 
-    // Provider real que llama a TMDB
     final ratingAsync = ref.watch(movieRatingProvider(movie.id));
+
+    // 🔥 Formato solicitado dd/MM/yyyy
+    final formattedShortDate = DateFormat(
+      'dd/MM/yyyy',
+    ).format(movie.releaseDate);
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -124,9 +138,9 @@ class _Slide extends ConsumerWidget {
             ),
           ),
 
-          const SizedBox(height: 5),
+          const SizedBox(height: 6),
 
-          // Titulo
+          // Título
           SizedBox(
             width: 150,
             child: Text(
@@ -137,14 +151,25 @@ class _Slide extends ConsumerWidget {
             ),
           ),
 
+          // FECHA SOLO EN UPCOMING
+          if (isUpcoming)
+            SizedBox(
+              width: 150,
+              child: Text(
+                "Estreno: $formattedShortDate",
+                style: textStyles.bodySmall!.copyWith(color: Colors.grey),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+
           const SizedBox(height: 4),
 
-          // ---------------- CLASIFICACIÓN (PÍLDORA) ----------------
+          // ---------------- CLASIFICACIÓN REAL TMDB (PÍLDORA) ----------------
           /*
                 ratingAsync.when(
                 data: (rating) => Container(
-                  padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
                   color: _ratingColor(rating).withOpacity(0.85),
                   borderRadius: BorderRadius.circular(20),
@@ -158,18 +183,14 @@ class _Slide extends ConsumerWidget {
                   ),
                   ),
                 ),
-
                 loading: () => Container(
-                  width: 22,
-                  height: 22,
+                  width: 18,
+                  height: 18,
                   padding: const EdgeInsets.all(2),
-                  child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  ),
+                  child: const CircularProgressIndicator(strokeWidth: 2),
                 ),
-
                 error: (_, __) => Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
                   decoration: BoxDecoration(
                   color: Colors.grey.withOpacity(0.85),
                   borderRadius: BorderRadius.circular(20),
@@ -184,43 +205,46 @@ class _Slide extends ConsumerWidget {
                   ),
                 ),
                 ),
-
-                const SizedBox(height: 4),
           */
 
-          // Rating y Popularidad
-          SizedBox(
-            width: 150,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.star_half_outlined,
-                  color: Colors.yellow.shade800,
-                  size: 16,
-                ),
-                const SizedBox(width: 3),
-                Text(
-                  '${movie.voteAverage}',
-                  style: textStyles.bodyMedium?.copyWith(
-                    color: Colors.yellow.shade800,
-                  ),
-                ),
-                const Spacer(),
-                Text(
-                  HumanFormats.humanReadbleNumber(movie.popularity),
-                  style: textStyles.bodySmall,
-                ),
-              ],
-            ),
+          const SizedBox(height: 4),
+
+// ⭐ POPULARIDAD Y CALIFICACIÓN (solo si NO es upcoming)
+if (!isUpcoming)
+  SizedBox(
+    width: 150,
+    child: Row(
+      children: [
+        Icon(
+          Icons.star_half_outlined,
+          color: Colors.yellow.shade800,
+          size: 16,
+        ),
+        const SizedBox(width: 3),
+        Text(
+          '${movie.voteAverage}',
+          style: textStyles.bodyMedium?.copyWith(
+            color: Colors.yellow.shade800,
           ),
+        ),
+        const Spacer(),
+        Text(
+          HumanFormats.humanReadbleNumber(movie.popularity),
+          style: textStyles.bodySmall,
+        ),
+      ],
+    ),
+  ),
+
         ],
       ),
     );
   }
 }
 
-
-// ---------------- HEADER ----------------
+// ---------------------------------------------------------------------
+// ------------------------------- HEADER ------------------------------
+// ---------------------------------------------------------------------
 
 class _CurrDate extends StatelessWidget {
   final String? place;

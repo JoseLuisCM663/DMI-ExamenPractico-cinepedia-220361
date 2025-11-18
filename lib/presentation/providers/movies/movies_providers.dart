@@ -18,7 +18,23 @@ final popularMoviesProvider = NotifierProvider<MoviesNotifier, List<Movie>>(
 
 // 🔹 2. Provider para UpComing
 final upcomingMoviesProvider = NotifierProvider<MoviesNotifier, List<Movie>>(
-  () => MoviesNotifier((ref) => ref.watch(movieRepositoryProvider).getUpcoming),
+  () {
+    return MoviesNotifier((ref) {
+      return ({int page = 1}) async {
+        final movies = await ref
+            .watch(movieRepositoryProvider)
+            .getUpcoming(page: page);
+
+        final now = DateTime.now();
+
+        // 🔥 Regresar solo películas del MISMO mes y año actuales
+        return movies.where((m) {
+          final d = m.releaseDate; // <-- YA ES DateTime
+          return d.year == now.year && d.month == now.month;
+        }).toList();
+      };
+    });
+  },
 );
 
 // 🔹 2. Provider para TopRated
