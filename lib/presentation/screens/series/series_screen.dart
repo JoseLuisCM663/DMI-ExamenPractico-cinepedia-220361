@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cinemapedia_220361/presentation/providers/series/series_providers.dart';
 import 'package:cinemapedia_220361/presentation/widgets/shared/custom_bottom_navigationbar.dart';
 import 'package:cinemapedia_220361/presentation/widgets/shared/custom_appbar.dart';
-import 'package:cinemapedia_220361/presentation/widgets/shared/fullscreen_loader.dart';
 import 'package:cinemapedia_220361/presentation/widgets/series/series_slideshow.dart';
 import 'package:cinemapedia_220361/presentation/widgets/series/series_horizontal_listview.dart';
 

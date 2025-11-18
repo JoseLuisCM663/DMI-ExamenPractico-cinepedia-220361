@@ -39,3 +39,4 @@ flutter:
     - .env
     - assets/icon/icon.png
     - assets/audio/splash.wav      # <--- AUDIO DEL SPLASH
+

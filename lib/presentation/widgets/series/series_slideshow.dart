@@ -21,8 +21,7 @@ class SeriesSlideshow extends StatelessWidget {
         autoplay: true,
         autoplayDelay: 4000,
         itemCount: series.length,
-        itemBuilder: (context, index) =>
-            _SlideShowItem(series: series[index]),
+        itemBuilder: (context, index) => _SlideShowItem(series: series[index]),
       ),
     );
   }
@@ -47,10 +46,22 @@ class _SlideShowItem extends StatelessWidget {
             children: [
               // Imagen principal
               SizedBox.expand(
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/loaders/bottle-loader.gif',
-                  image: series.backdropPath,
+                child: Image.network(
+                  series.backdropPath,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: SizedBox(
+                        height: 36,
+                        width: 36,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -94,7 +105,7 @@ class _SlideShowItem extends StatelessWidget {
                               blurRadius: 8,
                               color: Colors.black,
                               offset: Offset(2, 2),
-                            )
+                            ),
                           ],
                         ),
                       ),
@@ -120,7 +131,7 @@ class _SlideShowItem extends StatelessWidget {
                         style: textStyles.bodyMedium?.copyWith(
                           color: Colors.white70,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

@@ -2,7 +2,6 @@ import 'package:cinemapedia_220361/config/helpers/human_formats.dart';
 import 'package:cinemapedia_220361/domain/entities/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cinemapedia_220361/presentation/providers/movies/movie_rating_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -89,26 +88,9 @@ class _Slide extends ConsumerWidget {
 
   const _Slide({required this.movie, required this.isUpcoming});
 
-  Color _ratingColor(String rating) {
-    switch (rating) {
-      case "G":
-        return Colors.greenAccent;
-      case "PG":
-        return Colors.lightBlueAccent;
-      case "PG-13":
-        return Colors.orangeAccent;
-      case "R":
-        return Colors.redAccent;
-      default:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final textStyles = Theme.of(context).textTheme;
-
-    final ratingAsync = ref.watch(movieRatingProvider(movie.id));
 
     // 🔥 Formato solicitado dd/MM/yyyy
     final formattedShortDate = DateFormat(
@@ -129,10 +111,19 @@ class _Slide extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
               child: GestureDetector(
                 onTap: () => context.push('/movie/${movie.id}'),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/loaders/bottle-loader.gif',
-                  image: movie.posterPath,
+                child: Image.network(
+                  movie.posterPath,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -206,36 +197,34 @@ class _Slide extends ConsumerWidget {
                 ),
                 ),
           */
-
           const SizedBox(height: 4),
 
-// ⭐ POPULARIDAD Y CALIFICACIÓN (solo si NO es upcoming)
-if (!isUpcoming)
-  SizedBox(
-    width: 150,
-    child: Row(
-      children: [
-        Icon(
-          Icons.star_half_outlined,
-          color: Colors.yellow.shade800,
-          size: 16,
-        ),
-        const SizedBox(width: 3),
-        Text(
-          '${movie.voteAverage}',
-          style: textStyles.bodyMedium?.copyWith(
-            color: Colors.yellow.shade800,
-          ),
-        ),
-        const Spacer(),
-        Text(
-          HumanFormats.humanReadbleNumber(movie.popularity),
-          style: textStyles.bodySmall,
-        ),
-      ],
-    ),
-  ),
-
+          // ⭐ POPULARIDAD Y CALIFICACIÓN (solo si NO es upcoming)
+          if (!isUpcoming)
+            SizedBox(
+              width: 150,
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.star_half_outlined,
+                    color: Colors.yellow.shade800,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 3),
+                  Text(
+                    '${movie.voteAverage}',
+                    style: textStyles.bodyMedium?.copyWith(
+                      color: Colors.yellow.shade800,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    HumanFormats.humanReadbleNumber(movie.popularity),
+                    style: textStyles.bodySmall,
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

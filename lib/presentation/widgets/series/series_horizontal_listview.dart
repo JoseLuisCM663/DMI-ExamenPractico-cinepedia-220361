@@ -125,10 +125,19 @@ class _SeriesSlide extends ConsumerWidget {
               borderRadius: BorderRadius.circular(20),
               child: GestureDetector(
                 onTap: () => context.push('/series/${series.id}'),
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/loaders/bottle-loader.gif',
-                  image: series.posterPath,
+                child: Image.network(
+                  series.posterPath,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: SizedBox(
+                        height: 24,
+                        width: 24,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

@@ -22,8 +22,7 @@ class MovieSlideshow extends StatelessWidget {
         autoplay: true,
         autoplayDelay: 4000,
         itemCount: movies.length,
-        itemBuilder: (context, index) =>
-            _SlideShowItem(movie: movies[index]),
+        itemBuilder: (context, index) => _SlideShowItem(movie: movies[index]),
       ),
     );
   }
@@ -66,10 +65,22 @@ class _SlideShowItem extends ConsumerWidget {
             children: [
               // Imagen principal
               SizedBox.expand(
-                child: FadeInImage.assetNetwork(
-                  placeholder: 'assets/loaders/bottle-loader.gif',
-                  image: movie.backdropPath,
+                child: Image.network(
+                  movie.backdropPath,
                   fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const Center(
+                      child: SizedBox(
+                        height: 36,
+                        width: 36,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
 
@@ -104,7 +115,9 @@ class _SlideShowItem extends ConsumerWidget {
                       ratingAsync.when(
                         data: (rating) => Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: _ratingColor(rating).withOpacity(0.85),
                             borderRadius: BorderRadius.circular(30),
@@ -130,7 +143,9 @@ class _SlideShowItem extends ConsumerWidget {
                         ),
                         error: (_, __) => Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
+                            horizontal: 12,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
                             color: Colors.grey.withOpacity(0.85),
                             borderRadius: BorderRadius.circular(30),
@@ -157,9 +172,10 @@ class _SlideShowItem extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                           shadows: const [
                             Shadow(
-                                blurRadius: 8,
-                                color: Colors.black,
-                                offset: Offset(2, 2))
+                              blurRadius: 8,
+                              color: Colors.black,
+                              offset: Offset(2, 2),
+                            ),
                           ],
                         ),
                       ),
@@ -176,7 +192,7 @@ class _SlideShowItem extends ConsumerWidget {
                     ],
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ),

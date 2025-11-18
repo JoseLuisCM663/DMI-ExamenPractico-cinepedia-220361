@@ -1,16 +1,72 @@
-# cinemapedia_220361
+::: {align="center"}
+## 🏫 UNIVERSIDAD TECNOLÓGICA DE XICOTEPEC DE JUÁREZ
 
-A new Flutter project.
+### 👩‍💻 INGENIERÍA EN DESARROLLO Y GESTIÓN DE SOFTWARE
 
-## Getting Started
+#### 📚 DÉCIMO CUATRIMESTRE
 
-This project is a starting point for a Flutter application.
+------------------------------------------------------------------------
 
-A few resources to get you started if this is your first Flutter project:
+### 📖 MATERIA:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## **Desarrollo Móvil Integral**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### ALUMNO:
+
+## **José Luis Campos Márquez**
+
+------------------------------------------------------------------------
+
+### DOCENTE:
+
+## **M.T.I. Marco Antonio Ramírez Hernández**
+:::
+
+------------------------------------------------------------------------
+
+
+## 📱 Sección de Capturas
+
+### 🔴 Icono 
+
+![Icono  ](assets\screenshots\icono.jpeg)
+
+### 🟡 Splash Screen
+
+![Splash Screen](assets\screenshots\SplashScreen.jpeg)
+
+### 🟤 Loading Screen progresivo
+
+![Loading Screen progresivo](assets\screenshots\LoadingScreenprogresivo.jpeg)
+
+### ⚪  Clasificación de la pelicula según el estandar global ("US")
+
+![ Clasificación de la pelicula según el estandar global ("US") ](assets\screenshots\lasificación.jpeg)
+
+### ⚫ fecha dinámica actual 
+
+![fecha dinámica actual ](assets\screenshots\fechadinámicaactual .jpeg)
+
+### 🟣 fecha de estreno
+
+![fecha de estreno](assets\screenshots\fechadeestreno.jpeg)
+
+### 🟣 quitar el subtitulo
+
+![quitar el subtitulo](assets\screenshots\quitarelsubtitulo.jpeg)
+
+### 🟣 ordenarár por fecha de  esteno descendente
+
+![ordenarár por fecha de  esteno descendente](assets\screenshots\estenodescendente.jpeg)
+
+### 🟣 sección de Series 
+
+![sección de Series ](assets\screenshots\series.jpeg)
+![sección de Series ](assets\screenshots\series1.jpeg)
+![sección de Series ](assets\screenshots\series2.jpeg)
+------------------------------------------------------------------------
+
+
+## 👨‍💻 Autor
+
+Desarrollado por **José Luis Campos Márquez**
