@@ -100,31 +100,32 @@ class MoviedbDataSource extends MoviesDatasource {
     return movies;
   }
 
-  @override
-  Future<List<Movie>> getMexicanMovies({int page = 1}) async {
-    /// Realiza petición GET al endpoint de películas en cartelera
-    final response = await dio.get(
-      '/discover/movie',
-      queryParameters: {
-        'page': page,
-        'region': 'MX',
-        'withOriginalLanguaje': 'es',
-        'with_origin_country': 'MX',
-        'sort_by': 'vote_average.desc',
-        'vote_count.gte': 10,
-      },
-    );
+@override
+Future<List<Movie>> getMexicanMovies({int page = 1}) async {
+  final response = await dio.get(
+    '/discover/movie',
+    queryParameters: {
+      'page': page,
+      'region': 'MX',
+      'with_original_language': 'es',
+      'with_origin_country': 'MX',
+      'vote_count.gte': 10,
+    },
+  );
 
-    final movieDBResponse = MovieDbResponse.fromJson(response.data);
+  final movieDBResponse = MovieDbResponse.fromJson(response.data);
 
-    /// Filtra películas sin póster y las convierte a entidades
-    final List<Movie> movies = movieDBResponse.results
-        .where((moviedb) => moviedb.posterPath != 'no-poster')
-        .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
-        .toList();
+  List<Movie> movies = movieDBResponse.results
+      .where((moviedb) => moviedb.posterPath != 'no-poster')
+      .map((moviedb) => MovieMapper.movieDBToEntity(moviedb))
+      .toList();
 
-    return movies;
-  }
+  // 🔥 ORDENAR POR FECHA DE ESTRENO DESCENDENTE
+  movies.sort((a, b) => b.releaseDate.compareTo(a.releaseDate));
+
+  return movies;
+}
+
 
   @override
   Future<String> getMovieCertification(int movieId) async {
